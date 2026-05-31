@@ -75,7 +75,7 @@ export default function SalesDashboard() {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <div className="brand-name">🚗 SmartIncentive</div>
+          <div className="brand-name">SmartIncentive</div>
           <div className="brand-sub">Sales Officer Portal</div>
         </div>
         <nav className="sidebar-nav">

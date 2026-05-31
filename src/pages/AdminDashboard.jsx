@@ -17,7 +17,7 @@ export default function AdminDashboard() {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <div className="brand-name">🚗 SmartIncentive</div>
+          <div className="brand-name">SmartIncentive</div>
           <div className="brand-sub">Admin Configuration Portal</div>
         </div>
         <nav className="sidebar-nav">
@@ -66,8 +66,8 @@ function AdminOverview() {
       </div>
       <div className="row g-3 mb-4">
         {[
-          { icon: '🚗', label: 'Vehicle Models', desc: 'Add, edit, delete car models', path: '/admin/vehicles', color: '#eff6ff' },
-          { icon: '📊', label: 'Incentive Slabs', desc: 'Configure tiered incentive rates', path: '/admin/slabs', color: '#f0fdf4' },
+          { icon: '', label: 'Vehicle Models', desc: 'Add, edit, delete car models', path: '/admin/vehicles', color: '#eff6ff' },
+          { icon: '', label: 'Incentive Slabs', desc: 'Configure tiered incentive rates', path: '/admin/slabs', color: '#f0fdf4' },
         ].map(c => (
           <div key={c.label} className="col-md-6">
             <div className="stat-card" style={{ cursor: 'pointer', background: c.color }} onClick={() => navigate(c.path)}>
