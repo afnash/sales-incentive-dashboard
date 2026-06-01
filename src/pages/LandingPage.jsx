@@ -76,7 +76,7 @@ export default function LandingPage() {
 
       {/* Global Support Links */}
       <div className="landing-footer">
-        <a href="github.com/afnash" onClick={(e) => e.preventDefault()}>
+        <a href="https://github.com/afnash" target='_blank'>
           <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>help</span> Help Center
         </a>
         {/* <a href="#security" onClick={(e) => e.preventDefault()}>
