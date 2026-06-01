@@ -131,7 +131,7 @@ export default function VehicleModels() {
                 {saving && <span className="spinner-border spinner-border-sm me-1" />}
                 {editing ? 'Update Model' : 'Save Model'}
               </button>
-              <button className="btn-edit-sm" style={{ background: '#f1f5f9', color: '#475569', border: 'none' }} onClick={() => setShowModal(false)}>Cancel</button>
+              <button className="btn-edit-sm" style={{ border: 'none' }} onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function VehicleModels() {
             <p className="text-muted mb-4" style={{ fontSize: '.9rem' }}>Are you sure? This model will be permanently removed from the configuration lists.</p>
             <div className="d-flex gap-2 justify-content-center">
               <button className="btn-danger-sm px-4" style={{ padding: '.65rem 1.5rem' }} onClick={() => handleDelete(deleteId)}>Delete</button>
-              <button className="btn-edit-sm px-4" style={{ padding: '.65rem 1.5rem', background: '#f1f5f9', color: '#475569', border: 'none' }} onClick={() => setDeleteId(null)}>Cancel</button>
+              <button className="btn-edit-sm px-4" style={{ padding: '.65rem 1.5rem', border: 'none' }} onClick={() => setDeleteId(null)}>Cancel</button>
             </div>
           </div>
         </div>

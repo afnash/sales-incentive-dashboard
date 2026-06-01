@@ -1,8 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -27,6 +40,11 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page">
+      {/* Theme Toggle Button */}
+      <button className="theme-toggle-landing" onClick={toggleTheme} aria-label="Toggle Theme">
+        <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
+      </button>
+
       {/* Background Interactive Blobs */}
       <div className="bg-blob blob-top"></div>
       <div className="bg-blob blob-bottom"></div>
@@ -79,7 +97,9 @@ export default function LandingPage() {
         <a href="https://github.com/afnash" target='_blank'>
           <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>help</span> Help Center
         </a>
-        {/* <a href="#security" onClick={(e) => e.preventDefault()}>
+        <p>
+          <span style={{ color: 'var(--error-container)', fontWeight: 'bold' }}>Note:</span> This is a demonstration. Authentication is not enabled. Please configure your Supabase settings in the .env file if running in production.
+        </p>        {/* <a href="#security" onClick={(e) => e.preventDefault()}>
           <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>lock</span> Security Protocols
         </a>
         <a href="#support" onClick={(e) => e.preventDefault()}>

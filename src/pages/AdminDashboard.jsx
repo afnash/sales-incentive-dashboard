@@ -7,6 +7,19 @@ import { isSupabaseConfigured } from '../lib/supabase';
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   return (
     <div className="app-layout">
@@ -17,7 +30,7 @@ export default function AdminDashboard() {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <span className="material-symbols-outlined" style={{ color: 'var(--secondary-container)' }}>auto_graph</span>
+          <span className="material-symbols-outlined" style={{ color: 'var(--primary)' }}>auto_graph</span>
           <div className="brand-name">SmartIncentive</div>
           <div className="brand-sub">Admin Console</div>
         </div>
@@ -33,6 +46,10 @@ export default function AdminDashboard() {
           </NavLink>
         </nav>
         <div className="sidebar-footer">
+          <button className="nav-item theme-toggle-btn w-100 mx-0 mb-3 px-3 py-2" onClick={toggleTheme} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+            <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
+            {isDark ? 'Light Theme' : 'Dark Theme'}
+          </button>
           <button className="btn-back" onClick={() => navigate('/')}>
             <span className="material-symbols-outlined">arrow_back</span> Back to Portal
           </button>
@@ -42,7 +59,7 @@ export default function AdminDashboard() {
       <main className="main-content">
         {!isSupabaseConfigured && (
           <div className="alert-demo">
-            <span className="material-symbols-outlined" style={{ fontSize: '1.2rem' }}>info</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', color: 'var(--primary)' }}>info</span>
             <div>
               <strong>Demo Mode:</strong> Database offline. Changes will persist in memory only. Configure <code>.env</code> to connect Supabase.
             </div>
