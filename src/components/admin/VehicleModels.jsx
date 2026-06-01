@@ -79,27 +79,34 @@ export default function VehicleModels() {
             <table className="table table-hover mb-0">
               <thead>
                 <tr>
-                  <th style={{ width: '60px' }}>#</th>
+                  <th style={{ width: '60px' }} className="d-none d-md-table-cell">#</th>
                   <th>Model Name</th>
-                  <th>Base Suffix</th>
-                  <th>Variant</th>
-                  <th style={{ width: '200px' }}>Actions</th>
+                  <th className="d-none d-md-table-cell">Base Suffix</th>
+                  <th className="d-none d-md-table-cell">Variant</th>
+                  <th style={{ width: '160px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {models.map((m, i) => (
                   <tr key={m.id}>
-                    <td className="text-muted font-mono-data">{i + 1}</td>
-                    <td><strong>{m.model_name}</strong></td>
-                    <td>{m.base_suffix || <span className="text-muted">—</span>}</td>
-                    <td>{m.variant || <span className="text-muted">—</span>}</td>
+                    <td className="text-muted font-mono-data d-none d-md-table-cell">{i + 1}</td>
                     <td>
-                      <button className="btn-edit-sm me-2" onClick={() => openEdit(m)}>
-                        Edit
-                      </button>
-                      <button className="btn-danger-sm" onClick={() => setDeleteId(m.id)}>
-                        Delete
-                      </button>
+                      <strong>{m.model_name}</strong>
+                      <div className="d-block d-md-none text-muted" style={{ fontSize: '0.8rem', marginTop: '0.2rem' }}>
+                        {m.variant && `${m.variant} `}{m.base_suffix && `(${m.base_suffix})`}
+                      </div>
+                    </td>
+                    <td className="d-none d-md-table-cell">{m.base_suffix || <span className="text-muted">—</span>}</td>
+                    <td className="d-none d-md-table-cell">{m.variant || <span className="text-muted">—</span>}</td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <button className="btn-edit-sm" onClick={() => openEdit(m)}>
+                          Edit
+                        </button>
+                        <button className="btn-danger-sm" onClick={() => setDeleteId(m.id)}>
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

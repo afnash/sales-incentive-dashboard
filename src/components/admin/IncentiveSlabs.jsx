@@ -118,25 +118,27 @@ export default function IncentiveSlabs() {
             <table className="table table-hover mb-0">
               <thead>
                 <tr>
-                  <th style={{ width: '60px' }}>#</th>
+                  <th style={{ width: '60px' }} className="d-none d-md-table-cell">#</th>
                   <th>Tier Label</th>
-                  <th>Min Qty</th>
-                  <th>Max Qty</th>
+                  <th className="d-none d-md-table-cell">Min Qty</th>
+                  <th className="d-none d-md-table-cell">Max Qty</th>
                   <th>Incentive / Car</th>
-                  <th style={{ width: '200px' }}>Actions</th>
+                  <th style={{ width: '160px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {slabs.map((s, i) => (
                   <tr key={s.id}>
-                    <td className="text-muted font-mono-data">{i + 1}</td>
+                    <td className="text-muted font-mono-data d-none d-md-table-cell">{i + 1}</td>
                     <td><span className="badge-slab">{s.label || `${s.min_quantity}${s.max_quantity ? `–${s.max_quantity}` : '+'} cars`}</span></td>
-                    <td className="font-mono-data">{s.min_quantity}</td>
-                    <td className="font-mono-data">{s.max_quantity ?? <span className="text-success fw-bold font-mono-data">∞ Unlimited</span>}</td>
+                    <td className="font-mono-data d-none d-md-table-cell">{s.min_quantity}</td>
+                    <td className="font-mono-data d-none d-md-table-cell">{s.max_quantity ?? <span className="text-success fw-bold font-mono-data">∞ Unlimited</span>}</td>
                     <td><strong style={{ color: 'var(--secondary)', fontFamily: 'var(--font-mono)' }}>{fmt(s.incentive_per_car)}</strong></td>
                     <td>
-                      <button className="btn-edit-sm me-2" onClick={() => openEdit(s)}>Edit</button>
-                      <button className="btn-danger-sm" onClick={() => setDeleteId(s.id)}>Delete</button>
+                      <div className="d-flex gap-2">
+                        <button className="btn-edit-sm" onClick={() => openEdit(s)}>Edit</button>
+                        <button className="btn-danger-sm" onClick={() => setDeleteId(s.id)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))}

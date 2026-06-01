@@ -1,6 +1,16 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
-let demoSales = [];
+let demoSales = [
+  { id: 'd1', month: '2026-05', vehicle_model_id: '1', quantity_sold: 4, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  { id: 'd2', month: '2026-05', vehicle_model_id: '2', quantity_sold: 2, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  { id: 'd3', month: '2026-05', vehicle_model_id: '3', quantity_sold: 1, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  { id: 'd4', month: '2026-05', vehicle_model_id: '4', quantity_sold: 3, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  
+  { id: 'd5', month: '2026-06', vehicle_model_id: '1', quantity_sold: 2, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  { id: 'd6', month: '2026-06', vehicle_model_id: '2', quantity_sold: 1, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  { id: 'd7', month: '2026-06', vehicle_model_id: '3', quantity_sold: 1, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+  { id: 'd8', month: '2026-06', vehicle_model_id: '4', quantity_sold: 0, officer_name: 'Sales Officer', created_at: new Date().toISOString() },
+];
 
 export const salesService = {
   async getByMonth(month) {

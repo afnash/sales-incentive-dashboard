@@ -50,6 +50,7 @@ export default function SalesDashboard() {
     const ss = sRes.data || [];
     setModels(ms);
     setSlabs(ss);
+    
     // Load saved quantities for this month
     const { data: sales } = await salesService.getByMonth(month);
     const q = {};
@@ -84,7 +85,9 @@ export default function SalesDashboard() {
   return (
     <div className="app-layout">
       {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
-      <button className="hamburger" onClick={() => setSidebarOpen(v => !v)}><span className="material-symbols-outlined">menu</span></button>
+      <button className="hamburger" onClick={() => setSidebarOpen(v => !v)} style={{ zIndex: 110 }}>
+        <span className="material-symbols-outlined">menu</span>
+      </button>
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
@@ -98,45 +101,59 @@ export default function SalesDashboard() {
           </div>
         </nav>
         <div className="sidebar-footer">
-          <button className="nav-item theme-toggle-btn w-100 mx-0 mb-3 px-3 py-2" onClick={toggleTheme} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-            <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
-            {isDark ? 'Light Theme' : 'Dark Theme'}
-          </button>
           <button className="btn-back" onClick={() => navigate('/')}>
             <span className="material-symbols-outlined">arrow_back</span> Back to Portal
           </button>
         </div>
       </aside>
 
-      <main className="main-content">
-        {!isSupabaseConfigured && (
-          <div className="alert-demo">
-            <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', color: 'var(--primary)' }}>info</span>
+      <div className="main-container-wrapper" style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+        <header className="app-header">
+          <div className="app-header-title">
+            <span className="material-symbols-outlined text-primary" style={{ fontSize: '1.25rem' }}>analytics</span>
+            <span>Sales Performance Hub</span>
+          </div>
+          <div className="app-header-actions">
+            <button className="icon-btn-header" onClick={toggleTheme} title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}>
+              <span className="material-symbols-outlined" style={{ fontSize: '1.2rem' }}>{isDark ? 'light_mode' : 'dark_mode'}</span>
+            </button>
+            <button className="btn-header-action" onClick={() => navigate('/')}>
+              <span className="material-symbols-outlined" style={{ fontSize: '1.15rem' }}>home</span> Portal Gateway
+            </button>
+          </div>
+        </header>
+
+        <main className="main-content" style={{ minHeight: 'calc(100vh - 64px)' }}>
+          {!isSupabaseConfigured && (
+            <div className="alert-demo">
+              <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', color: 'var(--primary)' }}>info</span>
+              <div>
+                <strong>Demo Mode:</strong> Database offline. Entries will reset on refresh. Configure <code>.env</code> to connect Supabase.
+              </div>
+            </div>
+          )}
+
+          <div className="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-              <strong>Demo Mode:</strong> Database offline. Entries will reset on refresh. Configure <code>.env</code> to connect Supabase.
+              <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                Dealer Sales Log
+                {/* <span className="badge badge-toyota" style={{ padding: '0.35rem 0.65rem', fontSize: '0.65rem' }}>Toyota Team</span> */}
+              </h1>
+              <p>Log vehicle deliveries for the selected month and calculate earnings in real-time.</p>
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <label style={{ fontWeight: 700, fontSize: '.75rem', color: 'var(--on-surface-variant)', textTransform: 'uppercase', letterSpacing: '.5px' }}>Month:</label>
+              <input type="month" className="form-control-custom" style={{ width: 'auto' }}
+                value={month} onChange={e => setMonth(e.target.value)} />
             </div>
           </div>
-        )}
 
-        <div className="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <div>
-            <h1>Performance Hub</h1>
-            <p>Log vehicle deliveries for the selected month and calculate earnings in real-time.</p>
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            <label style={{ fontWeight: 700, fontSize: '.75rem', color: 'var(--on-surface-variant)', textTransform: 'uppercase', letterSpacing: '.5px' }}>Month:</label>
-            <input type="month" className="form-control-custom" style={{ width: 'auto' }}
-              value={month} onChange={e => setMonth(e.target.value)} />
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="spinner-wrap"><div className="spinner-border text-primary" /></div>
-        ) : (
-          <>
+          {loading ? (
+            <div className="spinner-wrap"><div className="spinner-border text-primary" /></div>
+          ) : (
             <div className="row g-3">
-              {/* Sales Input Table */}
-              <div className="col-lg-7">
+              {/* Left Column: Sales entry table and then Chart */}
+              <div className="col-lg-7 d-flex flex-column gap-3">
                 <div className="table-card">
                   <div className="table-card-header">
                     <h5>Sales Entry — {getMonthLabel(month)}</h5>
@@ -159,13 +176,23 @@ export default function SalesDashboard() {
                     <div className="table-responsive">
                       <table className="table table-hover mb-0">
                         <thead>
-                          <tr><th>Model</th><th>Variant</th><th className="text-center">Qty Sold</th></tr>
+                          <tr>
+                            <th>Model</th>
+                            <th className="d-none d-md-table-cell">Variant</th>
+                            <th className="text-center">Qty Sold</th>
+                          </tr>
                         </thead>
                         <tbody>
                           {models.map(m => (
                             <tr key={m.id}>
-                              <td><strong>{m.model_name}</strong>{m.base_suffix && <span className="text-muted ms-1" style={{ fontSize: '.8rem' }}>({m.base_suffix})</span>}</td>
-                              <td>{m.variant || <span className="text-muted">—</span>}</td>
+                              <td>
+                                <strong>{m.model_name}</strong>
+                                {m.base_suffix && <span className="text-muted ms-1" style={{ fontSize: '.8rem' }}>({m.base_suffix})</span>}
+                                <div className="d-block d-md-none text-muted" style={{ fontSize: '0.8rem', marginTop: '0.15rem' }}>
+                                  {m.variant || <span style={{ opacity: 0.5 }}>No variant</span>}
+                                </div>
+                              </td>
+                              <td className="d-none d-md-table-cell">{m.variant || <span className="text-muted">—</span>}</td>
                               <td className="text-center">
                                 <div className="d-flex align-items-center justify-content-center gap-2">
                                   <button style={{ border: 'none', background: 'var(--surface-container)', color: 'var(--on-surface)', borderRadius: 6, width: 28, height: 28, cursor: 'pointer', fontWeight: 700 }}
@@ -182,7 +209,9 @@ export default function SalesDashboard() {
                         </tbody>
                         <tfoot>
                           <tr style={{ background: 'var(--surface-container)' }}>
-                            <td colSpan={2}><strong>Total Vehicles Sold</strong></td>
+                            <td className="d-none d-md-table-cell"><strong>Total Vehicles Sold</strong></td>
+                            <td className="d-table-cell d-md-none"><strong>Total Sold</strong></td>
+                            <td className="d-none d-md-table-cell"></td>
                             <td className="text-center"><strong style={{ fontSize: '1.1rem', fontFamily: 'var(--font-mono)' }}>{totalQty}</strong></td>
                           </tr>
                         </tfoot>
@@ -190,11 +219,15 @@ export default function SalesDashboard() {
                     </div>
                   )}
                 </div>
+
+                <ModelSalesChart models={models} quantities={quantities} />
               </div>
 
-              {/* Incentive Panel */}
-              <div className="col-lg-5">
-                <div className="incentive-panel mb-3">
+              {/* Right Column: Performance status, Payout Estimation and Slab Reference */}
+              <div className="col-lg-5 d-flex flex-column gap-3">
+                <SlabProgressCard totalQty={totalQty} slab={slab} rate={rate} slabs={slabs} />
+
+                <div className="incentive-panel">
                   <h5>Incentive Payout Estimation</h5>
 
                   <div className="incentive-row">
@@ -231,7 +264,6 @@ export default function SalesDashboard() {
                   </div>
                 </div>
 
-                {/* Slab reference card */}
                 <div className="table-card">
                   <div className="table-card-header"><h5>All Incentive Slabs</h5></div>
                   <div className="table-responsive">
@@ -255,19 +287,9 @@ export default function SalesDashboard() {
                 </div>
               </div>
             </div>
-
-            {/* Analytics and Statistics Row */}
-            <div className="row g-3 mt-1">
-              <div className="col-lg-7">
-                <ModelSalesChart models={models} quantities={quantities} />
-              </div>
-              <div className="col-lg-5">
-                <SlabProgressCard totalQty={totalQty} slab={slab} rate={rate} slabs={slabs} />
-              </div>
-            </div>
-          </>
-        )}
-      </main>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
@@ -431,4 +453,3 @@ function SlabProgressCard({ totalQty, slab, rate, slabs }) {
     </div>
   );
 }
-
