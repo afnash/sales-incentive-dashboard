@@ -27,9 +27,11 @@ export default function AdminDashboard() {
   return (
     <div className="app-layout">
       {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
-      <button className="hamburger" onClick={() => setSidebarOpen(v => !v)} style={{ zIndex: 110 }}>
-        <span className="material-symbols-outlined">menu</span>
-      </button>
+      {!sidebarOpen && (
+        <button className="hamburger" onClick={() => setSidebarOpen(true)} style={{ zIndex: 110 }}>
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+      )}
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
@@ -59,14 +61,14 @@ export default function AdminDashboard() {
         <header className="app-header">
           <div className="app-header-title">
             <span className="material-symbols-outlined text-primary" style={{ fontSize: '1.25rem' }}>settings</span>
-            <span>Admin Control Panel</span>
+            <span className="d-none d-sm-inline">Admin Control Panel</span>
           </div>
           <div className="app-header-actions">
             <button className="icon-btn-header" onClick={toggleTheme} title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}>
               <span className="material-symbols-outlined" style={{ fontSize: '1.2rem' }}>{isDark ? 'light_mode' : 'dark_mode'}</span>
             </button>
             <button className="btn-header-action" onClick={() => navigate('/')}>
-              <span className="material-symbols-outlined" style={{ fontSize: '1.15rem' }}>home</span> Portal Gateway
+              <span className="material-symbols-outlined" style={{ fontSize: '1.15rem' }}>home</span>
             </button>
           </div>
         </header>
@@ -85,6 +87,10 @@ export default function AdminDashboard() {
             <Route path="/vehicles" element={<VehicleModels />} />
             <Route path="/slabs" element={<IncentiveSlabs />} />
           </Routes>
+          <footer className="app-footer">
+            <span>Developed by</span>
+            <a href="https://afnash.vercel.app" target="_blank" rel="noopener noreferrer">afnash</a>
+          </footer>
         </main>
       </div>
     </div>

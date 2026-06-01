@@ -93,18 +93,17 @@ export default function LandingPage() {
       </div>
 
       {/* Global Support Links */}
-      <div className="landing-footer">
+      <div className="landing-footer" style={{ flexDirection: 'column', gap: '0.75rem' }}>
         <a href="https://github.com/afnash" target='_blank'>
           <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>help</span> Help Center
         </a>
         <p>
           <span style={{ color: 'var(--error-container)', fontWeight: 'bold' }}>Note:</span> This is a demonstration. Authentication is not enabled. Please configure your Supabase settings in the .env file if running in production.
-        </p>        {/* <a href="#security" onClick={(e) => e.preventDefault()}>
-          <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>lock</span> Security Protocols
-        </a>
-        <a href="#support" onClick={(e) => e.preventDefault()}>
-          <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>contact_support</span> IT Support
-        </a> */}
+        </p>
+        <div className="app-footer" style={{ border: 'none', padding: '0.5rem 0', marginTop: '0.5rem' }}>
+          <span>Developed by</span>
+          <a href="https://afnash.vercel.app" target="_blank" rel="noopener noreferrer">afnash</a>
+        </div>
       </div>
 
       {/* System Build info */}
