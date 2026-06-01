@@ -17,23 +17,24 @@ export default function AdminDashboard() {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
+          <span className="material-symbols-outlined" style={{ color: 'var(--secondary-container)' }}>auto_graph</span>
           <div className="brand-name">SmartIncentive</div>
-          <div className="brand-sub">Admin Configuration Portal</div>
+          <div className="brand-sub">Admin Console</div>
         </div>
         <nav className="sidebar-nav">
           <NavLink to="/admin" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
-            <i className="bi bi-speedometer2" /> Overview
+            <span className="material-symbols-outlined">dashboard</span> Overview
           </NavLink>
           <NavLink to="/admin/vehicles" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
-            <i className="bi bi-car-front" /> Vehicle Models
+            <span className="material-symbols-outlined">directions_car</span> Vehicle Models
           </NavLink>
           <NavLink to="/admin/slabs" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
-            <i className="bi bi-layers" /> Incentive Slabs
+            <span className="material-symbols-outlined">payments</span> Incentive Slabs
           </NavLink>
         </nav>
         <div className="sidebar-footer">
           <button className="btn-back" onClick={() => navigate('/')}>
-            <i className="bi bi-arrow-left" /> Back to Home
+            <span className="material-symbols-outlined">arrow_back</span> Back to Portal
           </button>
         </div>
       </aside>
@@ -41,9 +42,10 @@ export default function AdminDashboard() {
       <main className="main-content">
         {!isSupabaseConfigured && (
           <div className="alert-demo">
-            <i className="bi bi-info-circle me-2" />
-            <strong>Demo Mode:</strong> Supabase not configured. Data is stored locally and will reset on refresh.
-            See <code>.env</code> to connect your database.
+            <span className="material-symbols-outlined" style={{ fontSize: '1.2rem' }}>info</span>
+            <div>
+              <strong>Demo Mode:</strong> Database offline. Changes will persist in memory only. Configure <code>.env</code> to connect Supabase.
+            </div>
           </div>
         )}
         <Routes>
@@ -61,32 +63,38 @@ function AdminOverview() {
   return (
     <>
       <div className="page-header">
-        <h1>Admin Dashboard</h1>
-        <p>Configure vehicle models and incentive slabs for sales officers.</p>
+        <div>
+          <h1>Admin Configuration Hub</h1>
+          <p>Define enterprise vehicle lines, model configurations, and payout tiers.</p>
+        </div>
       </div>
       <div className="row g-3 mb-4">
         {[
-          { icon: '', label: 'Vehicle Models', desc: 'Add, edit, delete car models', path: '/admin/vehicles', color: '#eff6ff' },
-          { icon: '', label: 'Incentive Slabs', desc: 'Configure tiered incentive rates', path: '/admin/slabs', color: '#f0fdf4' },
+          { icon: 'directions_car', label: 'Vehicle Models', desc: 'Add, update and configure primary vehicle segments and standard variants.', path: '/admin/vehicles' },
+          { icon: 'payments', label: 'Incentive Slabs', desc: 'Set cumulative volume slabs, scaling rates, and payout amounts.', path: '/admin/slabs' },
         ].map(c => (
           <div key={c.label} className="col-md-6">
-            <div className="stat-card" style={{ cursor: 'pointer', background: c.color }} onClick={() => navigate(c.path)}>
-              <div style={{ fontSize: '2.5rem' }}>{c.icon}</div>
-              <div className="stat-value" style={{ fontSize: '1.25rem', marginTop: '.5rem' }}>{c.label}</div>
-              <div style={{ color: 'var(--muted)', fontSize: '.85rem', marginTop: '.25rem' }}>{c.desc}</div>
-              <div style={{ marginTop: '1rem', color: 'var(--primary-light)', fontSize: '.85rem', fontWeight: 600 }}>
-                Manage → 
+            <div className="stat-card" style={{ cursor: 'pointer', minHeight: '160px' }} onClick={() => navigate(c.path)}>
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+                <div>
+                  <div className="stat-label">{c.label}</div>
+                  <div style={{ color: 'var(--on-surface-variant)', fontSize: '.9rem', marginTop: '.5rem', lineHeight: '1.4' }}>{c.desc}</div>
+                </div>
+                <div style={{ marginTop: '1.5rem', color: 'var(--primary-container)', fontSize: '.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.5px' }}>
+                  Manage Console → 
+                </div>
               </div>
+              <span className="material-symbols-outlined stat-icon" style={{ fontSize: '2rem' }}>{c.icon}</span>
             </div>
           </div>
         ))}
       </div>
       <div className="table-card p-4">
-        <h5 className="fw-bold mb-2">Quick Start Guide</h5>
-        <ol style={{ color: 'var(--muted)', fontSize: '.9rem', lineHeight: 2 }}>
-          <li>Go to <strong>Vehicle Models</strong> and add the car models your dealership sells.</li>
-          <li>Go to <strong>Incentive Slabs</strong> and configure quantity-based incentive tiers.</li>
-          <li>Sales officers can then log their monthly sales and see real-time incentive calculations.</li>
+        <h5 className="fw-bold mb-3" style={{ color: 'var(--primary)' }}>Quick Start Instructions</h5>
+        <ol style={{ color: 'var(--on-surface-variant)', fontSize: '.9rem', lineHeight: 2.2 }}>
+          <li>Navigate to <strong>Vehicle Models</strong> and update the model catalog.</li>
+          <li>Set up <strong>Incentive Slabs</strong> to establish quantity targets and incentive tiers.</li>
+          <li>Sales officers can log entries on the <strong>Performance Hub</strong> to see calculated earnings immediately.</li>
         </ol>
       </div>
     </>

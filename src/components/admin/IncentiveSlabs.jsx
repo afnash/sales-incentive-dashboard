@@ -66,29 +66,33 @@ export default function IncentiveSlabs() {
   return (
     <>
       <div className="page-header">
-        <h1>Incentive Slabs</h1>
-        <p>Configure tiered incentive rates based on quantity sold per month.</p>
+        <div>
+          <h1>Incentive Slabs</h1>
+          <p>Configure tiered payout rates scaling with sales volume targets.</p>
+        </div>
       </div>
 
       <div className="row g-3 mb-4">
         {slabs.map(s => (
           <div key={s.id} className="col-md-4">
             <div className="stat-card" style={{ borderLeft: '4px solid var(--accent)' }}>
-              <div className="d-flex justify-content-between align-items-start">
-                <div>
-                  <div className="stat-label">Quantity Range</div>
-                  <div className="stat-value" style={{ fontSize: '1.3rem' }}>
-                    {s.min_quantity}{s.max_quantity ? `–${s.max_quantity}` : '+'} cars
+              <div style={{ flexGrow: 1 }}>
+                <div className="d-flex justify-content-between align-items-start">
+                  <div>
+                    <div className="stat-label">Quantity Range</div>
+                    <div className="stat-value" style={{ fontSize: '1.25rem', fontFamily: 'var(--font-mono)' }}>
+                      {s.min_quantity}{s.max_quantity ? `–${s.max_quantity}` : '+'} cars
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div className="stat-label">Per Car</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--secondary)', fontFamily: 'var(--font-mono)' }}>{fmt(s.incentive_per_car)}</div>
                   </div>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div className="stat-label">Per Car</div>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--accent)' }}>{fmt(s.incentive_per_car)}</div>
+                <div className="d-flex gap-2 mt-4">
+                  <button className="btn-edit-sm" onClick={() => openEdit(s)}>Edit</button>
+                  <button className="btn-danger-sm" onClick={() => setDeleteId(s.id)}>Delete</button>
                 </div>
-              </div>
-              <div className="d-flex gap-2 mt-3">
-                <button className="btn-edit-sm" onClick={() => openEdit(s)}><i className="bi bi-pencil" /> Edit</button>
-                <button className="btn-danger-sm" onClick={() => setDeleteId(s.id)}><i className="bi bi-trash" /> Delete</button>
               </div>
             </div>
           </div>
@@ -97,33 +101,42 @@ export default function IncentiveSlabs() {
 
       <div className="table-card">
         <div className="table-card-header">
-          <h5>All Slabs <span className="badge bg-secondary ms-1">{slabs.length}</span></h5>
-          <button className="btn-primary-custom" onClick={openAdd}><i className="bi bi-plus-lg" /> Add Slab</button>
+          <h5 className="mb-0">All Tiers <span className="badge bg-secondary ms-1">{slabs.length}</span></h5>
+          <button className="btn-primary-custom" onClick={openAdd}>
+            <span className="material-symbols-outlined" style={{ fontSize: '1.2rem' }}>add</span> Add Slab
+          </button>
         </div>
         {loading ? (
           <div className="spinner-wrap"><div className="spinner-border text-primary" /></div>
         ) : slabs.length === 0 ? (
           <div className="text-center p-5 text-muted">
-            <i className="bi bi-layers" style={{ fontSize: '2rem' }} />
+            <span className="material-symbols-outlined" style={{ fontSize: '3rem', color: 'var(--border)' }}>payments</span>
             <p className="mt-2">No incentive slabs configured yet.</p>
           </div>
         ) : (
           <div className="table-responsive">
             <table className="table table-hover mb-0">
               <thead>
-                <tr><th>#</th><th>Range</th><th>Min Qty</th><th>Max Qty</th><th>Incentive / Car</th><th>Actions</th></tr>
+                <tr>
+                  <th style={{ width: '60px' }}>#</th>
+                  <th>Tier Label</th>
+                  <th>Min Qty</th>
+                  <th>Max Qty</th>
+                  <th>Incentive / Car</th>
+                  <th style={{ width: '200px' }}>Actions</th>
+                </tr>
               </thead>
               <tbody>
                 {slabs.map((s, i) => (
                   <tr key={s.id}>
-                    <td className="text-muted">{i + 1}</td>
+                    <td className="text-muted font-mono-data">{i + 1}</td>
                     <td><span className="badge-slab">{s.label || `${s.min_quantity}${s.max_quantity ? `–${s.max_quantity}` : '+'} cars`}</span></td>
-                    <td>{s.min_quantity}</td>
-                    <td>{s.max_quantity ?? <span className="text-success fw-bold">∞ Unlimited</span>}</td>
-                    <td><strong style={{ color: 'var(--accent)' }}>{fmt(s.incentive_per_car)}</strong></td>
+                    <td className="font-mono-data">{s.min_quantity}</td>
+                    <td className="font-mono-data">{s.max_quantity ?? <span className="text-success fw-bold font-mono-data">∞ Unlimited</span>}</td>
+                    <td><strong style={{ color: 'var(--secondary)', fontFamily: 'var(--font-mono)' }}>{fmt(s.incentive_per_car)}</strong></td>
                     <td>
-                      <button className="btn-edit-sm me-2" onClick={() => openEdit(s)}><i className="bi bi-pencil" /> Edit</button>
-                      <button className="btn-danger-sm" onClick={() => setDeleteId(s.id)}><i className="bi bi-trash" /> Delete</button>
+                      <button className="btn-edit-sm me-2" onClick={() => openEdit(s)}>Edit</button>
+                      <button className="btn-danger-sm" onClick={() => setDeleteId(s.id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -142,28 +155,28 @@ export default function IncentiveSlabs() {
               <div className="col-6">
                 <div className="form-group">
                   <label>Min Quantity *</label>
-                  <input className="form-control-custom" type="number" min="1" value={form.min_quantity}
+                  <input className="form-control-custom font-mono-data" type="number" min="1" value={form.min_quantity}
                     onChange={e => setForm(f => ({ ...f, min_quantity: e.target.value }))}
                     placeholder="e.g. 1"
                     style={{ borderColor: errors.min_quantity ? 'var(--danger)' : undefined }} />
-                  {errors.min_quantity && <div style={{ color: 'var(--danger)', fontSize: '.8rem' }}>{errors.min_quantity}</div>}
+                  {errors.min_quantity && <div style={{ color: 'var(--danger)', fontSize: '.8rem', marginTop: '.25rem' }}>{errors.min_quantity}</div>}
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <label>Max Quantity</label>
-                  <input className="form-control-custom" type="number" min="1" value={form.max_quantity}
+                  <input className="form-control-custom font-mono-data" type="number" min="1" value={form.max_quantity}
                     disabled={unlimited}
                     onChange={e => setForm(f => ({ ...f, max_quantity: e.target.value }))}
                     placeholder="e.g. 7"
                     style={{ borderColor: errors.max_quantity ? 'var(--danger)' : undefined, opacity: unlimited ? .5 : 1 }} />
-                  {errors.max_quantity && <div style={{ color: 'var(--danger)', fontSize: '.8rem' }}>{errors.max_quantity}</div>}
+                  {errors.max_quantity && <div style={{ color: 'var(--danger)', fontSize: '.8rem', marginTop: '.25rem' }}>{errors.max_quantity}</div>}
                 </div>
               </div>
             </div>
 
-            <div className="form-group">
-              <label style={{ display: 'flex', alignItems: 'center', gap: '.5rem', cursor: 'pointer' }}>
+            <div className="form-group my-3">
+              <label style={{ display: 'flex', alignItems: 'center', gap: '.5rem', cursor: 'pointer', textTransform: 'none', fontWeight: 600 }}>
                 <input type="checkbox" checked={unlimited} onChange={e => { setUnlimited(e.target.checked); setForm(f => ({ ...f, max_quantity: '' })); }} />
                 No upper limit (e.g., "8+ cars")
               </label>
@@ -171,26 +184,26 @@ export default function IncentiveSlabs() {
 
             <div className="form-group">
               <label>Incentive Per Car (₹) *</label>
-              <input className="form-control-custom" type="number" min="0" value={form.incentive_per_car}
+              <input className="form-control-custom font-mono-data" type="number" min="0" value={form.incentive_per_car}
                 onChange={e => setForm(f => ({ ...f, incentive_per_car: e.target.value }))}
                 placeholder="e.g. 2000"
                 style={{ borderColor: errors.incentive_per_car ? 'var(--danger)' : undefined }} />
-              {errors.incentive_per_car && <div style={{ color: 'var(--danger)', fontSize: '.8rem' }}>{errors.incentive_per_car}</div>}
+              {errors.incentive_per_car && <div style={{ color: 'var(--danger)', fontSize: '.8rem', marginTop: '.25rem' }}>{errors.incentive_per_car}</div>}
             </div>
 
             {form.min_quantity && form.incentive_per_car && (
-              <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '.75rem 1rem', marginBottom: '1rem', fontSize: '.85rem' }}>
+              <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 8, padding: '.75rem 1rem', marginBottom: '1.25rem', fontSize: '.85rem' }}>
                 Preview: <strong>{form.min_quantity}{unlimited ? '+' : form.max_quantity ? `–${form.max_quantity}` : ''} cars</strong> →{' '}
                 <strong style={{ color: 'var(--success)' }}>₹{Number(form.incentive_per_car).toLocaleString('en-IN')} / car</strong>
               </div>
             )}
 
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 mt-4">
               <button className="btn-primary-custom" onClick={handleSave} disabled={saving}>
                 {saving && <span className="spinner-border spinner-border-sm me-1" />}
-                {editing ? 'Update' : 'Save'}
+                {editing ? 'Update Slab' : 'Save Slab'}
               </button>
-              <button className="btn-edit-sm" onClick={() => setShowModal(false)}>Cancel</button>
+              <button className="btn-edit-sm" style={{ background: '#f1f5f9', color: '#475569', border: 'none' }} onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
         </div>
@@ -199,12 +212,12 @@ export default function IncentiveSlabs() {
       {deleteId && (
         <div className="modal-overlay">
           <div className="modal-box" style={{ maxWidth: 360, textAlign: 'center' }}>
-            <div style={{ fontSize: '2.5rem' }}>🗑️</div>
-            <h4 className="mt-2">Delete Slab?</h4>
-            <p className="text-muted mb-3" style={{ fontSize: '.9rem' }}>This will remove the incentive tier permanently.</p>
+            <span className="material-symbols-outlined text-danger" style={{ fontSize: '3rem' }}>delete_forever</span>
+            <h4 className="mt-3 mb-2">Delete Slab?</h4>
+            <p className="text-muted mb-4" style={{ fontSize: '.9rem' }}>Are you sure? This will remove this incentive payout tier permanently.</p>
             <div className="d-flex gap-2 justify-content-center">
-              <button className="btn-danger-sm" style={{ padding: '.6rem 1.5rem' }} onClick={() => handleDelete(deleteId)}>Delete</button>
-              <button className="btn-edit-sm" style={{ padding: '.6rem 1.5rem' }} onClick={() => setDeleteId(null)}>Cancel</button>
+              <button className="btn-danger-sm px-4" style={{ padding: '.65rem 1.5rem' }} onClick={() => handleDelete(deleteId)}>Delete</button>
+              <button className="btn-edit-sm px-4" style={{ padding: '.65rem 1.5rem', background: '#f1f5f9', color: '#475569', border: 'none' }} onClick={() => setDeleteId(null)}>Cancel</button>
             </div>
           </div>
         </div>

@@ -30,6 +30,7 @@ body {
   background-color: var(--bg); 
   color: var(--on-surface); 
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Typography Helpers */
@@ -263,6 +264,8 @@ body {
 .app-layout { 
   display: flex; 
   min-height: 100vh; 
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -357,6 +360,7 @@ body {
   margin-left: var(--sidebar-width); 
   flex: 1; 
   padding: 2.5rem; 
+  min-width: 0;
 }
 .page-header { 
   margin-bottom: 2rem; 
@@ -451,6 +455,12 @@ body {
   font-size: 0.9rem; 
   padding: 1rem 1.25rem;
   color: var(--on-surface);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 .badge-slab { 
@@ -693,7 +703,7 @@ body {
   }
   .main-content { 
     margin-left: 0; 
-    padding: 1.5rem; 
+    padding: 1rem; 
     padding-top: 4.5rem; 
   }
   .hamburger { 
@@ -707,7 +717,59 @@ body {
   .glass-card { 
     width: 100%; 
   }
+  .landing-brand {
+    position: static;
+    margin-bottom: 2rem;
+    align-self: flex-start;
+  }
+  .landing-brand .brand-title {
+    font-size: 1.25rem;
+  }
   .landing-header h1 {
-    font-size: 2.25rem;
+    font-size: 2rem;
+  }
+  .landing-header p {
+    font-size: 1rem;
+  }
+  .landing-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .stat-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .stat-card .stat-icon {
+    margin-top: 1rem;
+    align-self: flex-start;
+  }
+  .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+  .table-card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  .table-card-header h5 {
+    margin-bottom: 0.5rem;
+  }
+  .modal-box {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  .incentive-total {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .incentive-total .amount {
+    font-size: 1.75rem;
   }
 }
