@@ -39,6 +39,32 @@ export default function IncentiveSlabs() {
     if (!unlimited && !form.max_quantity) e.max_quantity = 'Required or check unlimited';
     if (!unlimited && Number(form.max_quantity) <= Number(form.min_quantity)) e.max_quantity = 'Max must be > Min';
     if (!form.incentive_per_car) e.incentive_per_car = 'Required';
+
+    if (Object.keys(e).length === 0) {
+      const minA = Number(form.min_quantity);
+      const maxA = unlimited ? Infinity : Number(form.max_quantity);
+
+      const conflictingSlab = slabs.find(s => {
+        if (editing && s.id === editing.id) return false;
+
+        const minB = Number(s.min_quantity);
+        const maxB = s.max_quantity === null ? Infinity : Number(s.max_quantity);
+
+        return minA <= maxB && minB <= maxA;
+      });
+
+      if (conflictingSlab) {
+        const slabLabel = conflictingSlab.max_quantity
+          ? `${conflictingSlab.min_quantity}–${conflictingSlab.max_quantity}`
+          : `${conflictingSlab.min_quantity}+`;
+        e.general = `This range overlaps with an existing slab (${slabLabel} cars).`;
+        e.min_quantity = 'Clashing range';
+        if (!unlimited) {
+          e.max_quantity = 'Clashing range';
+        }
+      }
+    }
+
     return e;
   };
 
@@ -152,6 +178,12 @@ export default function IncentiveSlabs() {
         <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setShowModal(false)}>
           <div className="modal-box">
             <h4>{editing ? 'Edit Incentive Slab' : 'Add Incentive Slab'}</h4>
+
+            {errors.general && (
+              <div style={{ color: 'var(--danger)', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: 8, padding: '.75rem 1rem', marginBottom: '1.25rem', fontSize: '.85rem' }}>
+                {errors.general}
+              </div>
+            )}
 
             <div className="row g-2">
               <div className="col-6">
