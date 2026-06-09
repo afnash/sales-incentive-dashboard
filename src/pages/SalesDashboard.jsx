@@ -290,10 +290,10 @@ export default function SalesDashboard() {
               </div>
             </div>
           )}
-          <footer className="app-footer">
+          {/* <footer className="app-footer">
             <span>Developed by</span>
             <a href="https://afnash.vercel.app" target="_blank" rel="noopener noreferrer">afnash</a>
-          </footer>
+          </footer> */}
         </main>
       </div>
     </div>
